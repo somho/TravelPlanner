@@ -39,14 +39,45 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh and bounce on mobile */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
 }
 
 * {
   border-color: var(--border);
+}
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Utilities */
+.overscroll-contain {
+  overscroll-behavior: contain;
 }
