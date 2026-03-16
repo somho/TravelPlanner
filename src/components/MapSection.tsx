@@ -181,7 +181,7 @@ export default function MapSection({ onAddBookmark, categories, bookmarks, event
     };
 
     // Custom marker colors via SVG path
-    const getMarkerIcon = (categoryId?: string) => {
+    const getMarkerIcon = (categoryId?: string | null) => {
         const defaultColor = "#E60012";
         const cat = categories.find(c => c.id === categoryId);
         const scale = 1.2;

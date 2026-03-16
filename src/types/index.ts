@@ -10,7 +10,10 @@ export interface Place {
     address: string;
     lat: number;
     lng: number;
-    categoryId?: string;
+    url?: string;
+    categoryId?: string | null;
+    customName?: string;
+    placeName?: string;
     externalUrl?: string; // Optional Google Maps link
 }
 

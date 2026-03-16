@@ -151,7 +151,7 @@ export default function Home() {
 
       <main className="flex-1 overflow-hidden p-2 md:p-4 lg:p-6 flex flex-col h-full">
         <PanelGroup
-          direction={isMobile ? "vertical" : "horizontal"}
+          orientation={(isMobile ? "vertical" : "horizontal") as "vertical" | "horizontal"}
           className="h-full w-full rounded-2xl border shadow-sm overflow-hidden bg-card"
         >
           <Panel defaultSize={50} minSize={30} className="relative h-full">

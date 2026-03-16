@@ -25,7 +25,7 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
         setTimeout(() => setCopiedId(null), 2000);
     };
 
-    const getCategory = (id?: string) => categories.find(c => c.id === id);
+    const getCategory = (id?: string | null) => categories.find(c => c.id === id);
 
     return (
         <div className="flex flex-col gap-2 h-full">
