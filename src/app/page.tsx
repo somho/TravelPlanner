@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon, Plane, Home as HomeIcon } from "lucide-react";
+import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon, Plane, Home as HomeIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { Group as PanelGroup, Panel, Separator as PanelResizeHandle } from "react-resizable-panels";
 import { Place, TravelEvent, Category } from "@/types";
 import { v4 as uuidv4 } from 'uuid'; // 파일 상단에 추가
@@ -28,6 +28,12 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeFocusId, setActiveFocusId] = useState<string | null>(null);
   const [bookmarkSearch, setBookmarkSearch] = useState("");
+
+  // Visibility state for sections
+  const [isCalendarOpen, setIsCalendarOpen] = useState(true);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(true);
+  const [isNotepadOpen, setIsNotepadOpen] = useState(true);
+  const [isBookmarksOpen, setIsBookmarksOpen] = useState(true);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -199,63 +205,103 @@ export default function Home() {
 
           <Panel defaultSize={50} minSize={30} className="h-full overflow-y-auto pr-2 custom-scrollbar bg-card flex flex-col overscroll-contain">            <div className="p-4 flex flex-col gap-6 w-full pb-10">
 
-              <div className="bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden min-h-[500px]">
-                <div className="p-4 border-b bg-muted/30 flex items-center gap-2">
-                  <CalendarIcon className="w-5 h-5 text-primary" />
-                  <h2 className="font-semibold text-sm">일정표</h2>
+              <div className={`bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 ${isCalendarOpen ? "min-h-[500px]" : "min-h-0"}`}>
+                <div 
+                  className="p-4 border-b bg-muted/30 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                >
+                  <div className="flex items-center gap-2">
+                    <CalendarIcon className="w-5 h-5 text-primary" />
+                    <h2 className="font-semibold text-sm">일정표</h2>
+                  </div>
+                  <button className="p-1 rounded-md hover:bg-muted transition-colors">
+                    {isCalendarOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                  </button>
                 </div>
-                <div className="p-4 flex-1 h-full overflow-hidden">
-                  <CalendarSection
-                    events={events}
-                    categories={categories}
-                    tripSettings={tripSettings}
-                    onDateClick={handleDateClick}
-                    onEventClick={handleEventClick}
-                    onSaveSettings={handleSaveSettings}
-                    onShowLocation={(place) => setActiveFocusId(place.id)}
-                  />
-                </div>
+                {isCalendarOpen && (
+                  <div className="p-4 flex-1 h-full overflow-hidden">
+                    <CalendarSection
+                      events={events}
+                      categories={categories}
+                      tripSettings={tripSettings}
+                      onDateClick={handleDateClick}
+                      onEventClick={handleEventClick}
+                      onSaveSettings={handleSaveSettings}
+                      onShowLocation={(place) => setActiveFocusId(place.id)}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 <div className="bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden">
-                  <div className="p-4 border-b bg-muted/30 flex items-center gap-2">
-                    <BookmarkIcon className="w-5 h-5 text-primary" />
-                    <h2 className="font-semibold text-sm">카테고리 관리</h2>
+                  <div 
+                    className="p-4 border-b bg-muted/30 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <BookmarkIcon className="w-5 h-5 text-primary" />
+                      <h2 className="font-semibold text-sm">카테고리 관리</h2>
+                    </div>
+                    <button className="p-1 rounded-md hover:bg-muted transition-colors">
+                      {isCategoriesOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                    </button>
                   </div>
-                  <div className="p-4 flex-1">
-                    {/* [변경] 카테고리 관리도 DB 기반으로 동작하도록 수정 필요 */}
-                    <CategoryManager categories={categories} />
-                  </div>
+                  {isCategoriesOpen && (
+                    <div className="p-4 flex-1">
+                      {/* [변경] 카테고리 관리도 DB 기반으로 동작하도록 수정 필요 */}
+                      <CategoryManager categories={categories} />
+                    </div>
+                  )}
                 </div>
 
-                <div className="bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden min-h-[250px] xl:row-span-2">
-                  <div className="p-4 border-b bg-muted/30 flex items-center gap-2">
-                    <NotebookPenIcon className="w-5 h-5 text-primary" />
-                    <h2 className="font-semibold text-sm">공용 메모장</h2>
+                <div className={`bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 xl:row-span-2 ${isNotepadOpen ? "min-h-[250px]" : "min-h-0"}`}>
+                  <div 
+                    className="p-4 border-b bg-muted/30 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setIsNotepadOpen(!isNotepadOpen)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <NotebookPenIcon className="w-5 h-5 text-primary" />
+                      <h2 className="font-semibold text-sm">공용 메모장</h2>
+                    </div>
+                    <button className="p-1 rounded-md hover:bg-muted transition-colors">
+                      {isNotepadOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                    </button>
                   </div>
-                  <div className="p-4 flex-1 flex flex-col">
-                    {/* [변경] 초기 값전달 */}
-                    <SharedNotepad initialContent={notepadContent} />
-                  </div>
+                  {isNotepadOpen && (
+                    <div className="p-4 flex-1 flex flex-col">
+                      {/* [변경] 초기 값전달 */}
+                      <SharedNotepad initialContent={notepadContent} />
+                    </div>
+                  )}
                 </div>
 
-                <div className="bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden min-h-[300px]">
-                  <div className="p-4 border-b bg-muted/30 flex items-center gap-2">
-                    <MapPinIcon className="w-5 h-5 text-primary" />
-                    <h2 className="font-semibold text-sm">저장된 장소</h2>
+                <div className={`bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 ${isBookmarksOpen ? "min-h-[300px]" : "min-h-0"}`}>
+                  <div 
+                    className="p-4 border-b bg-muted/30 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setIsBookmarksOpen(!isBookmarksOpen)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <MapPinIcon className="w-5 h-5 text-primary" />
+                      <h2 className="font-semibold text-sm">저장된 장소</h2>
+                    </div>
+                    <button className="p-1 rounded-md hover:bg-muted transition-colors">
+                      {isBookmarksOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                    </button>
                   </div>
-                  <div className="p-2 flex-1 flex flex-col gap-2">
-                    <BookmarkList
-                      bookmarks={filteredBookmarks}
-                      categories={categories}
-                      searchTerm={bookmarkSearch}
-                      onSearchChange={setBookmarkSearch}
-                      onDelete={handleDeleteBookmark}
-                      onEdit={handleEditBookmark}
-                      onSelect={(id) => setActiveFocusId(id)}
-                    />
-                  </div>
+                  {isBookmarksOpen && (
+                    <div className="p-2 flex-1 flex flex-col gap-2">
+                      <BookmarkList
+                        bookmarks={filteredBookmarks}
+                        categories={categories}
+                        searchTerm={bookmarkSearch}
+                        onSearchChange={setBookmarkSearch}
+                        onDelete={handleDeleteBookmark}
+                        onEdit={handleEditBookmark}
+                        onSelect={(id) => setActiveFocusId(id)}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
