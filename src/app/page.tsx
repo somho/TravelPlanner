@@ -146,7 +146,17 @@ export default function Home() {
             <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">실시간 협업 중</p>
           </div>
         </div>
-        {/* ... 헤더 나머지 부분 ... */}
+        <div className="flex items-center gap-3">
+          <a
+            href="https://www.google.co.kr/maps/@33.5809908,130.4160382,12z?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-sm font-semibold transition-all shadow-sm border border-primary/20"
+          >
+            <MapIcon className="w-4 h-4" />
+            <span className="hidden xs:inline">구글 지도 열기</span>
+          </a>
+        </div>
       </header>
 
       <main className="flex-1 overflow-hidden p-2 md:p-4 lg:p-6 flex flex-col h-full">
