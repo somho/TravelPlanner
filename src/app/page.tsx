@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon, Plane } from "lucide-react";
+import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon, Plane, Home as HomeIcon } from "lucide-react";
 import { Group as PanelGroup, Panel, Separator as PanelResizeHandle } from "react-resizable-panels";
 import { Place, TravelEvent, Category } from "@/types";
 import { v4 as uuidv4 } from 'uuid'; // 파일 상단에 추가
@@ -147,6 +147,15 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <a
+            href="https://www.airbnb.co.kr/s/%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4%EC%8B%9C/homes?place_id=ChIJKYSE6aHtQTURg4c5NplyCvY&refinement_paths%5B%5D=%2Fhomes&checkin=2026-04-10&checkout=2026-04-13&date_picker_type=calendar&adults=4&guests=4&search_type=AUTOSUGGEST"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 rounded-xl text-sm font-semibold transition-all shadow-sm border border-pink-500/20"
+          >
+            <HomeIcon className="w-4 h-4" />
+            <span className="hidden xs:inline">숙소 검색</span>
+          </a>
           <a
             href="https://flight.naver.com/flights/international/PUS:airport-FUK:airport-20260410/FUK:airport-PUS:airport-20260413?adult=1&fareType=Y&isDirect=false"
             target="_blank"
