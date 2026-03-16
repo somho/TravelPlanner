@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon } from "lucide-react";
+import { CalendarIcon, NotebookPenIcon, BookmarkIcon, MapPinIcon, MapIcon, Plane } from "lucide-react";
 import { Group as PanelGroup, Panel, Separator as PanelResizeHandle } from "react-resizable-panels";
 import { Place, TravelEvent, Category } from "@/types";
 import { v4 as uuidv4 } from 'uuid'; // 파일 상단에 추가
@@ -147,6 +147,15 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <a
+            href="https://flight.naver.com/flights/international/PUS:airport-FUK:airport-20260410/FUK:airport-PUS:airport-20260413?adult=1&fareType=Y&isDirect=false"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 rounded-xl text-sm font-semibold transition-all shadow-sm border border-blue-500/20"
+          >
+            <Plane className="w-4 h-4" />
+            <span className="hidden xs:inline">항공권 검색</span>
+          </a>
           <a
             href="https://www.google.co.kr/maps/@33.5809908,130.4160382,12z?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
             target="_blank"
