@@ -12,9 +12,21 @@ interface BookmarkListProps {
     onDelete?: (id: string) => void;
     onEdit?: (id: string, newName: string, categoryId: string | null) => void;
     onSelect?: (id: string) => void;
+    selectedCategoryId: string | null;
+    onCategoryChange: (id: string | null) => void;
 }
 
-export default function BookmarkList({ bookmarks, categories, searchTerm, onSearchChange, onDelete, onEdit, onSelect }: BookmarkListProps) {
+export default function BookmarkList({ 
+    bookmarks, 
+    categories, 
+    searchTerm, 
+    onSearchChange, 
+    onDelete, 
+    onEdit, 
+    onSelect,
+    selectedCategoryId,
+    onCategoryChange
+}: BookmarkListProps) {
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
@@ -40,6 +52,42 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
                     className="w-full pl-9 pr-4 py-2 bg-muted/40 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 <GlobeIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            </div>
+
+            {/* Category Filter Chips */}
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 no-scrollbar items-center">
+                <button
+                    onClick={() => onCategoryChange(null)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all flex-none border ${
+                        selectedCategoryId === null
+                            ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                            : "bg-background text-muted-foreground hover:border-primary/30"
+                    }`}
+                >
+                    전체
+                </button>
+                {categories.map((cat) => (
+                    <button
+                        key={cat.id}
+                        onClick={() => onCategoryChange(cat.id)}
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-all flex-none border whitespace-nowrap flex items-center gap-1.5 ${
+                            selectedCategoryId === cat.id
+                                ? "shadow-sm"
+                                : "bg-background text-muted-foreground hover:border-primary/30"
+                        }`}
+                        style={selectedCategoryId === cat.id ? { 
+                            backgroundColor: cat.color, 
+                            color: 'white',
+                            borderColor: cat.color
+                        } : {}}
+                    >
+                        <div 
+                            className="w-1.5 h-1.5 rounded-full" 
+                            style={{ backgroundColor: selectedCategoryId === cat.id ? 'white' : cat.color }} 
+                        />
+                        {cat.name}
+                    </button>
+                ))}
             </div>
 
             <div className="flex flex-col gap-2 overflow-y-auto max-h-[400px] custom-scrollbar">

@@ -28,6 +28,7 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeFocusId, setActiveFocusId] = useState<string | null>(null);
   const [bookmarkSearch, setBookmarkSearch] = useState("");
+  const [selectedBookmarkCategoryId, setSelectedBookmarkCategoryId] = useState<string | null>(null);
 
   // Visibility state for sections
   const [isCalendarOpen, setIsCalendarOpen] = useState(true);
@@ -140,7 +141,12 @@ export default function Home() {
     const targetName = (b.name || b.customName || b.placeName || "").toLowerCase();
     const search = (bookmarkSearch || "").toLowerCase();
 
-    return targetName.includes(search);
+    const matchesSearch = targetName.includes(search);
+    const matchesCategory = selectedBookmarkCategoryId 
+      ? b.categoryId === selectedBookmarkCategoryId 
+      : true;
+
+    return matchesSearch && matchesCategory;
   });
 
   return (
@@ -302,6 +308,8 @@ export default function Home() {
                         onDelete={handleDeleteBookmark}
                         onEdit={handleEditBookmark}
                         onSelect={(id) => setActiveFocusId(id)}
+                        selectedCategoryId={selectedBookmarkCategoryId}
+                        onCategoryChange={setSelectedBookmarkCategoryId}
                       />
                     </div>
                   )}
