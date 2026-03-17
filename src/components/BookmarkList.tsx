@@ -10,7 +10,7 @@ interface BookmarkListProps {
     searchTerm: string;
     onSearchChange: (value: string) => void;
     onDelete?: (id: string) => void;
-    onEdit?: (id: string, newName: string) => void;
+    onEdit?: (id: string, newName: string, categoryId: string | null) => void;
     onSelect?: (id: string) => void;
 }
 
@@ -18,6 +18,7 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
+    const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
 
     const handleCopy = (address: string, id: string) => {
         navigator.clipboard.writeText(address);
@@ -59,34 +60,54 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
                             >
                                 <div className="flex justify-between items-start gap-2">
                                     {editingId === b.id ? (
-                                        <div className="flex-1 flex gap-1">
-                                            <input
-                                                type="text"
-                                                value={editName}
-                                                onChange={e => setEditName(e.target.value)}
-                                                className="w-full text-sm font-semibold border-b bg-transparent outline-none"
-                                                autoFocus
-                                                onKeyDown={(e) => {
-                                                    if (e.key === 'Enter' && onEdit) {
-                                                        onEdit(b.id, editName);
-                                                        setEditingId(null);
-                                                    } else if (e.key === 'Escape') {
-                                                        setEditingId(null);
-                                                    }
-                                                }}
-                                            />
-                                            <button onClick={() => {
-                                                if (onEdit) onEdit(b.id, editName);
-                                                setEditingId(null);
-                                            }} className="text-green-500 hover:text-green-600"><CheckIcon className="w-4 h-4" /></button>
-                                            <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:text-foreground"><XIcon className="w-4 h-4" /></button>
+                                        <div className="flex-1 flex flex-col gap-2">
+                                            <div className="flex gap-1">
+                                                <input
+                                                    type="text"
+                                                    value={editName}
+                                                    onChange={e => setEditName(e.target.value)}
+                                                    className="w-full text-sm font-semibold border-b bg-transparent outline-none"
+                                                    autoFocus
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter' && onEdit) {
+                                                            onEdit(b.id, editName, editCategoryId);
+                                                            setEditingId(null);
+                                                        } else if (e.key === 'Escape') {
+                                                            setEditingId(null);
+                                                        }
+                                                    }}
+                                                />
+                                                <button onClick={() => {
+                                                    if (onEdit) onEdit(b.id, editName, editCategoryId);
+                                                    setEditingId(null);
+                                                }} className="text-green-500 hover:text-green-600"><CheckIcon className="w-4 h-4" /></button>
+                                                <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:text-foreground"><XIcon className="w-4 h-4" /></button>
+                                            </div>
+                                            <select
+                                                value={editCategoryId || ""}
+                                                onChange={(e) => setEditCategoryId(e.target.value || null)}
+                                                className="text-xs bg-muted/50 border rounded px-2 py-1 outline-none focus:ring-1 focus:ring-primary/30"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <option value="">카테고리 없음</option>
+                                                {categories.map((c) => (
+                                                    <option key={c.id} value={c.id}>
+                                                        {c.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                     ) : (
                                         <h4 className="font-semibold text-sm leading-tight flex items-center gap-1 group/title">
                                             {b.name}
                                             {onEdit && (
                                                 <button
-                                                    onClick={() => { setEditingId(b.id); setEditName(b.name); }}
+                                                    onClick={(e) => { 
+                                                        e.stopPropagation();
+                                                        setEditingId(b.id); 
+                                                        setEditName(b.name); 
+                                                        setEditCategoryId(b.categoryId || null);
+                                                    }}
                                                     className="opacity-0 group-hover/title:opacity-100 p-0.5 text-muted-foreground hover:text-primary transition-opacity"
                                                 >
                                                     <PencilIcon className="w-3 h-3" />
@@ -96,12 +117,12 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
                                     )}
                                     <div className="flex gap-1 flex-none">
                                         {b.externalUrl && (
-                                            <a href={b.externalUrl} target="_blank" rel="noreferrer" className="p-1 rounded text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors" title="구글 맵에서 열기">
+                                            <a href={b.externalUrl} target="_blank" rel="noreferrer" className="p-1 rounded text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors" title="구글 맵에서 열기" onClick={(e) => e.stopPropagation()}>
                                                 <GlobeIcon className="w-3.5 h-3.5" />
                                             </a>
                                         )}
                                         <button
-                                            onClick={() => handleCopy(b.address, b.id)}
+                                            onClick={(e) => { e.stopPropagation(); handleCopy(b.address, b.id); }}
                                             className="p-1 rounded text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                                             title="주소 복사"
                                         >
@@ -109,7 +130,8 @@ export default function BookmarkList({ bookmarks, categories, searchTerm, onSear
                                         </button>
                                         {onDelete && (
                                             <button
-                                                onClick={() => {
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
                                                     if (confirm("이 장소를 북마크에서 삭제하시겠습니까?")) {
                                                         onDelete(b.id);
                                                     }

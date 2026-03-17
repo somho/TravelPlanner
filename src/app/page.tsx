@@ -70,8 +70,11 @@ export default function Home() {
     await supabase.from('bookmarks').delete().eq('id', id);
   };
 
-  const handleEditBookmark = async (id: string, newName: string) => {
-    await supabase.from('bookmarks').update({ customName: newName }).eq('id', id);
+  const handleEditBookmark = async (id: string, newName: string, categoryId: string | null) => {
+    await supabase.from('bookmarks').update({ 
+      customName: newName,
+      categoryId: categoryId 
+    }).eq('id', id);
   };
 
   const handleSaveEvent = async (eventData: Omit<TravelEvent, "id">, existingId?: string) => {
@@ -141,7 +144,7 @@ export default function Home() {
   });
 
   return (
-    <div className="h-[100dvh] flex flex-col bg-background overscroll-none">
+    <div className="h-[100dvh] flex flex-col bg-background">
       <header className="flex-none h-16 border-b bg-card flex items-center px-6 justify-between shadow-sm z-10 sticky top-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 md:w-10 md:h-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg shadow-sm">
@@ -203,7 +206,7 @@ export default function Home() {
             <div className="w-8 h-1 md:w-1 md:h-8 bg-border rounded-full absolute" />
           </PanelResizeHandle>
 
-          <Panel defaultSize={50} minSize={30} className="h-full overflow-y-auto pr-2 custom-scrollbar bg-card flex flex-col overscroll-contain">            <div className="p-4 flex flex-col gap-6 w-full pb-10">
+          <Panel defaultSize={50} minSize={30} className="h-full overflow-y-auto pr-2 custom-scrollbar bg-card flex flex-col overscroll-contain touch-pan-y">            <div className="p-4 flex flex-col gap-6 w-full pb-10">
 
               <div className={`bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 ${isCalendarOpen ? "min-h-[500px]" : "min-h-0"}`}>
                 <div 
