@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CopyIcon, CheckIcon, MapPinIcon, GlobeIcon, Trash2Icon, PencilIcon, XIcon } from "lucide-react";
+import { CopyIcon, CheckIcon, MapPinIcon, GlobeIcon, Trash2Icon, PencilIcon, XIcon, PinIcon } from "lucide-react";
 import { Place, Category } from "@/types";
 
 interface BookmarkListProps {
@@ -14,6 +14,7 @@ interface BookmarkListProps {
     onSelect?: (id: string) => void;
     selectedCategoryId: string | null;
     onCategoryChange: (id: string | null) => void;
+    onTogglePin?: (id: string, isPinned: boolean) => void;
 }
 
 export default function BookmarkList({ 
@@ -25,7 +26,8 @@ export default function BookmarkList({
     onEdit, 
     onSelect,
     selectedCategoryId,
-    onCategoryChange
+    onCategoryChange,
+    onTogglePin
 }: BookmarkListProps) {
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -175,6 +177,16 @@ export default function BookmarkList({
                                             title="주소 복사"
                                         >
                                             {copiedId === b.id ? <CheckIcon className="w-3.5 h-3.5 text-green-500" /> : <CopyIcon className="w-3.5 h-3.5" />}
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onTogglePin && onTogglePin(b.id, !b.isPinned);
+                                            }}
+                                            className={`p-1 rounded transition-colors ${b.isPinned ? "text-primary bg-primary/10 hover:bg-primary/20" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+                                            title={b.isPinned ? "고정 해제" : "상단 고정"}
+                                        >
+                                            <PinIcon className={`w-3.5 h-3.5 ${b.isPinned ? "fill-current" : ""}`} />
                                         </button>
                                         {onDelete && (
                                             <button

@@ -58,6 +58,7 @@ model Bookmark {
   // 필수 위치 정보
   latitude     Float
   longitude    Float
+  isPinned     Boolean   @default(false)
 
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

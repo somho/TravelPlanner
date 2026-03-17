@@ -15,6 +15,7 @@ export interface Place {
     customName?: string;
     placeName?: string;
     externalUrl?: string; // Optional Google Maps link
+    isPinned?: boolean;
 }
 
 export interface TravelEvent {

@@ -78,6 +78,10 @@ export default function Home() {
     }).eq('id', id);
   };
 
+  const handleTogglePinBookmark = async (id: string, isPinned: boolean) => {
+    await supabase.from('bookmarks').update({ isPinned }).eq('id', id);
+  };
+
   const handleSaveEvent = async (eventData: Omit<TravelEvent, "id">, existingId?: string) => {
     // Helper to format local Date without UTC conversion
     const toLocalISOString = (date: Date) => {
@@ -147,6 +151,9 @@ export default function Home() {
       : true;
 
     return matchesSearch && matchesCategory;
+  }).sort((a, b) => {
+    if (a.isPinned === b.isPinned) return 0;
+    return a.isPinned ? -1 : 1;
   });
 
   return (
@@ -212,8 +219,8 @@ export default function Home() {
             <div className="w-8 h-1 md:w-1 md:h-8 bg-border rounded-full absolute" />
           </PanelResizeHandle>
 
-          <Panel defaultSize={50} minSize={30} className="h-full overflow-y-auto pr-2 custom-scrollbar bg-card flex flex-col overscroll-contain touch-pan-y">            <div className="p-4 flex flex-col gap-6 w-full pb-10">
-
+          <Panel defaultSize={50} minSize={30} className="h-full overflow-y-auto pr-2 custom-scrollbar bg-card flex flex-col overscroll-contain touch-pan-y">
+            <div className="p-4 flex flex-col gap-6 w-full pb-10">
               <div className={`bg-card flex flex-col rounded-2xl shadow-sm border overflow-hidden transition-all duration-300 ${isCalendarOpen ? "min-h-[500px]" : "min-h-0"}`}>
                 <div 
                   className="p-4 border-b bg-muted/30 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors"
@@ -310,6 +317,7 @@ export default function Home() {
                         onSelect={(id) => setActiveFocusId(id)}
                         selectedCategoryId={selectedBookmarkCategoryId}
                         onCategoryChange={setSelectedBookmarkCategoryId}
+                        onTogglePin={handleTogglePinBookmark}
                       />
                     </div>
                   )}
