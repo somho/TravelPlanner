@@ -164,13 +164,13 @@ export default function Home() {
             🇯🇵
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight">후쿠오카 여행 플래너</h1>
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight">오사카 여행 플래너</h1>
             <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">실시간 협업 중</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="https://www.airbnb.co.kr/s/%ED%9B%84%EC%BF%A0%EC%98%A4%EC%B9%B4%EC%8B%9C/homes?place_id=ChIJKYSE6aHtQTURg4c5NplyCvY&refinement_paths%5B%5D=%2Fhomes&checkin=2026-04-10&checkout=2026-04-13&date_picker_type=calendar&adults=4&guests=4&search_type=AUTOSUGGEST"
+            href="https://www.airbnb.co.kr/s/Osaka--Japan/homes?tab_id=home_tab&refinement_paths%5B%5D=%2Fhomes&search_mode=flex_destinations_search&checkin=2026-04-10&checkout=2026-04-13&adults=4&source=structured_search_input_header&search_type=user_map_move"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-pink-500/10 hover:bg-pink-500/20 text-pink-600 rounded-xl text-sm font-semibold transition-all shadow-sm border border-pink-500/20"
@@ -179,7 +179,7 @@ export default function Home() {
             <span className="hidden xs:inline">숙소 검색</span>
           </a>
           <a
-            href="https://flight.naver.com/flights/international/PUS:airport-FUK:airport-20260410/FUK:airport-PUS:airport-20260413?adult=1&fareType=Y&isDirect=false"
+            href="https://flight.naver.com/flights/international/PUS:airport-KIX:airport-20260410/KIX:airport-PUS:airport-20260413?adult=1&fareType=Y&isDirect=false"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 rounded-xl text-sm font-semibold transition-all shadow-sm border border-blue-500/20"
@@ -188,7 +188,7 @@ export default function Home() {
             <span className="hidden xs:inline">항공권 검색</span>
           </a>
           <a
-            href="https://www.google.co.kr/maps/@33.5809908,130.4160382,12z?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+            href="https://www.google.co.kr/maps/@34.668725,135.501295,15z?entry=ttu"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl text-sm font-semibold transition-all shadow-sm border border-primary/20"

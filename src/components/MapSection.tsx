@@ -12,10 +12,10 @@ const mapContainerStyle = {
     height: "100%",
 };
 
-// V2 Default to Fukuoka City
+// V2 Default to Osaka City (Dotonbori)
 const defaultCenter = {
-    lat: 33.5902,
-    lng: 130.4017,
+    lat: 34.6687,
+    lng: 135.5013,
 };
 
 interface MapSectionProps {

@@ -149,7 +149,16 @@ export default function BookmarkList({
                                         </div>
                                     ) : (
                                         <h4 className="font-semibold text-sm leading-tight flex items-center gap-1 group/title">
-                                            {b.name}
+                                            <a 
+                                                href={b.externalUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' ' + b.address)}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="hover:text-primary hover:underline transition-all"
+                                                onClick={(e) => e.stopPropagation()}
+                                                title="구글 맵에서 보기"
+                                            >
+                                                {b.name}
+                                            </a>
                                             {onEdit && (
                                                 <button
                                                     onClick={(e) => { 

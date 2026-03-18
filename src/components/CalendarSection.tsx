@@ -254,6 +254,22 @@ export default function CalendarSection({
                     >
                         <MapPinIcon className="w-3.5 h-3.5" /> 위치 표시
                     </button>
+                    {popoverEvent.location && (
+                        <a
+                            href={popoverEvent.location.externalUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(popoverEvent.location.name + ' ' + (popoverEvent.location.address || ''))}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold hover:bg-muted text-foreground rounded-lg transition-colors text-left"
+                            onClick={() => setPopoverEvent(null)}
+                        >
+                            <div className="w-3.5 h-3.5 flex items-center justify-center">
+                                <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                                </svg>
+                            </div>
+                            구글 맵에서 열기
+                        </a>
+                    )}
                     <button
                         onClick={() => {
                             onEventClick(popoverEvent);
