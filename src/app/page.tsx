@@ -83,6 +83,52 @@ export default function Home() {
   };
 
   const handleSaveEvent = async (eventData: Omit<TravelEvent, "id">, existingId?: string) => {
+    // 일정 중복 확인 로직 (최대 3개)
+    // 현재 이벤트와 시간이 겹치는 동일 일자의 이벤트들을 찾아 최대 겹침 횟수를 계산
+    const newStart = eventData.start.getTime();
+    const newEnd = eventData.end.getTime();
+
+    const timePoints: { time: number, type: number }[] = [];
+    timePoints.push({ time: newStart, type: 1 });
+    timePoints.push({ time: newEnd, type: -1 });
+
+    const relevantEvents = events.filter(e => e.id !== existingId);
+    
+    // 새 이벤트와 시간이 겹치는 기존 이벤트의 시작, 종료 시간 추가
+    for (const e of relevantEvents) {
+      const start = e.start.getTime();
+      const end = e.end.getTime();
+      
+      // 겹치는지 확인 (시작시간이 끝시간보다 앞서고, 끝시간이 시작시간보다 뒤일 때 겹침)
+      if (start < newEnd && end > newStart) {
+        timePoints.push({ time: start, type: 1 });
+        timePoints.push({ time: end, type: -1 });
+      }
+    }
+
+    // 시간 순 정렬, 시간이 같으면 종료(-1)를 먼저 처리하여 이어지는 일정은 겹치는 것으로 보지 않음
+    timePoints.sort((a, b) => {
+      if (a.time === b.time) {
+        return a.type - b.type;
+      }
+      return a.time - b.time;
+    });
+
+    let currentOverlap = 0;
+    let maxOverlap = 0;
+
+    for (const point of timePoints) {
+      currentOverlap += point.type;
+      if (currentOverlap > maxOverlap) {
+        maxOverlap = currentOverlap;
+      }
+    }
+
+    if (maxOverlap > 3) {
+      alert("해당 시간대에는 이미 일정이 3개 있습니다. 최대 3개까지만 추가할 수 있습니다.");
+      return;
+    }
+
     // Helper to format local Date without UTC conversion
     const toLocalISOString = (date: Date) => {
       const pad = (n: number) => n.toString().padStart(2, '0');
