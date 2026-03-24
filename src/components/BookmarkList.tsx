@@ -10,7 +10,7 @@ interface BookmarkListProps {
     searchTerm: string;
     onSearchChange: (value: string) => void;
     onDelete?: (id: string) => void;
-    onEdit?: (id: string, newName: string, categoryId: string | null) => void;
+    onEdit?: (id: string, newName: string, categoryId: string | null, memo?: string | null) => void;
     onSelect?: (id: string) => void;
     selectedCategoryId: string | null;
     onCategoryChange: (id: string | null) => void;
@@ -33,6 +33,7 @@ export default function BookmarkList({
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
     const [editCategoryId, setEditCategoryId] = useState<string | null>(null);
+    const [editMemo, setEditMemo] = useState("");
 
     const handleCopy = (address: string, id: string) => {
         navigator.clipboard.writeText(address);
@@ -120,18 +121,22 @@ export default function BookmarkList({
                                                     autoFocus
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' && onEdit) {
-                                                            onEdit(b.id, editName, editCategoryId);
+                                                            onEdit(b.id, editName, editCategoryId, editMemo);
                                                             setEditingId(null);
                                                         } else if (e.key === 'Escape') {
                                                             setEditingId(null);
                                                         }
                                                     }}
                                                 />
-                                                <button onClick={() => {
-                                                    if (onEdit) onEdit(b.id, editName, editCategoryId);
+                                                <button onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (onEdit) onEdit(b.id, editName, editCategoryId, editMemo);
                                                     setEditingId(null);
                                                 }} className="text-green-500 hover:text-green-600"><CheckIcon className="w-4 h-4" /></button>
-                                                <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:text-foreground"><XIcon className="w-4 h-4" /></button>
+                                                <button onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setEditingId(null);
+                                                }} className="text-muted-foreground hover:text-foreground"><XIcon className="w-4 h-4" /></button>
                                             </div>
                                             <select
                                                 value={editCategoryId || ""}
@@ -146,6 +151,21 @@ export default function BookmarkList({
                                                     </option>
                                                 ))}
                                             </select>
+                                            <textarea
+                                                value={editMemo}
+                                                onChange={e => setEditMemo(e.target.value)}
+                                                className="w-full text-xs bg-muted/50 border rounded p-2 outline-none focus:ring-1 focus:ring-primary/30 resize-none mt-1"
+                                                placeholder="메모를 입력하세요..."
+                                                rows={2}
+                                                onClick={(e) => e.stopPropagation()}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && !e.shiftKey && onEdit) {
+                                                        e.preventDefault();
+                                                        onEdit(b.id, editName, editCategoryId, editMemo);
+                                                        setEditingId(null);
+                                                    }
+                                                }}
+                                            />
                                         </div>
                                     ) : (
                                         <h4 className="font-semibold text-sm leading-tight flex items-center gap-1 group/title">
@@ -166,6 +186,7 @@ export default function BookmarkList({
                                                         setEditingId(b.id); 
                                                         setEditName(b.name); 
                                                         setEditCategoryId(b.categoryId || null);
+                                                        setEditMemo(b.memo || "");
                                                     }}
                                                     className="opacity-0 group-hover/title:opacity-100 p-0.5 text-muted-foreground hover:text-primary transition-opacity"
                                                 >
@@ -226,6 +247,11 @@ export default function BookmarkList({
                                         <span className="truncate">{b.address}</span>
                                     </p>
                                 </div>
+                                {b.memo && (
+                                    <div className="mt-1 text-xs text-foreground/80 bg-muted/30 p-2 rounded-md border border-border/50 whitespace-pre-wrap">
+                                        {b.memo}
+                                    </div>
+                                )}
                             </div>
                         );
                     }))}

@@ -14,6 +14,7 @@ export interface Place {
     categoryId?: string | null;
     customName?: string;
     placeName?: string;
+    memo?: string | null;
     externalUrl?: string; // Optional Google Maps link
     isPinned?: boolean;
 }

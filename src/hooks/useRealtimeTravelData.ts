@@ -46,7 +46,8 @@ export function useRealtimeTravelData() {
                 address: b.placeName || "",
                 url: b.googleMapUrl || "",
                 categoryId: b.categoryId,
-                isPinned: b.isPinned
+                isPinned: b.isPinned,
+                memo: b.memo
             })));
             if (noteData) setNotepadContent(noteData.content);
             if (setData) setTripSettings({
@@ -99,7 +100,8 @@ export function useRealtimeTravelData() {
                     lng: (payload.new as any).longitude,
                     url: (payload.new as any).googleMapUrl,
                     categoryId: (payload.new as any).categoryId,
-                    isPinned: (payload.new as any).isPinned
+                    isPinned: (payload.new as any).isPinned,
+                    memo: (payload.new as any).memo
                 } : null;
 
                 if (payload.eventType === 'INSERT') setBookmarks(prev => [...prev, mapped as any]);

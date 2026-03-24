@@ -71,11 +71,12 @@ export default function Home() {
     await supabase.from('bookmarks').delete().eq('id', id);
   };
 
-  const handleEditBookmark = async (id: string, newName: string, categoryId: string | null) => {
-    await supabase.from('bookmarks').update({ 
-      customName: newName,
-      categoryId: categoryId 
-    }).eq('id', id);
+  const handleEditBookmark = async (id: string, newName: string, categoryId: string | null, memo?: string | null) => {
+    const updateData: any = { customName: newName, categoryId };
+    if (memo !== undefined) {
+      updateData.memo = memo;
+    }
+    await supabase.from('bookmarks').update(updateData).eq('id', id);
   };
 
   const handleTogglePinBookmark = async (id: string, isPinned: boolean) => {
