@@ -21,7 +21,7 @@ export function useRealtimeTravelData() {
 
             if (setError) console.error('Error fetching settings:', setError);
 
-            if (catData) setCategories(catData);
+            if (catData) setCategories(catData.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)));
             if (evtData) setEvents(evtData.map(e => ({
                 ...e,
                 start: new Date(e.startTime),
@@ -63,8 +63,8 @@ export function useRealtimeTravelData() {
             .channel('schema-db-changes')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, (payload) => {
                 console.log('Realtime Categories:', payload);
-                if (payload.eventType === 'INSERT') setCategories(prev => [...prev, payload.new as Category]);
-                if (payload.eventType === 'UPDATE') setCategories(prev => prev.map(c => c.id === (payload.new as any).id ? payload.new as Category : c));
+                if (payload.eventType === 'INSERT') setCategories(prev => [...prev, payload.new as Category].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)));
+                if (payload.eventType === 'UPDATE') setCategories(prev => prev.map(c => c.id === (payload.new as any).id ? payload.new as Category : c).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)));
                 if (payload.eventType === 'DELETE') setCategories(prev => prev.filter(c => c.id !== payload.old.id));
             })
             .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, (payload) => {

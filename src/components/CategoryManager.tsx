@@ -19,6 +19,29 @@ export default function CategoryManager({ categories }: CategoryManagerProps) {
     const [newName, setNewName] = useState("");
     const [newColor, setNewColor] = useState("#000000");
 
+    const [draggedId, setDraggedId] = useState<string | null>(null);
+
+    const handleDragStart = (id: string) => setDraggedId(id);
+    const handleDragOver = (e: React.DragEvent) => e.preventDefault();
+    const handleDrop = async (targetId: string) => {
+        if (!draggedId || draggedId === targetId) return;
+
+        const oldIndex = categories.findIndex(c => c.id === draggedId);
+        const newIndex = categories.findIndex(c => c.id === targetId);
+        if (oldIndex === -1 || newIndex === -1) return;
+
+        const newCategories = [...categories];
+        const [removed] = newCategories.splice(oldIndex, 1);
+        newCategories.splice(newIndex, 0, removed);
+
+        setDraggedId(null);
+
+        // Update sort order for all affected categories
+        await Promise.all(newCategories.map((cat, index) => 
+            supabase.from('categories').update({ sortOrder: index }).eq('id', cat.id)
+        ));
+    };
+
     const handleEditClick = (c: Category) => {
         setEditingId(c.id);
         setEditName(c.name);
@@ -44,6 +67,7 @@ export default function CategoryManager({ categories }: CategoryManagerProps) {
             id: uuidv4(),
             name: newName,
             color: newColor,
+            sortOrder: categories.length,
             createdAt: now,
             updatedAt: now
         }]);
@@ -64,7 +88,14 @@ export default function CategoryManager({ categories }: CategoryManagerProps) {
             {/* List */}
             <div className="flex flex-wrap gap-2">
                 {categories.map((c) => (
-                    <div key={c.id} className="relative group border rounded-full px-3 py-1 flex items-center gap-2 bg-background shadow-sm text-sm">
+                    <div 
+                        key={c.id} 
+                        draggable={editingId !== c.id}
+                        onDragStart={() => handleDragStart(c.id)}
+                        onDragOver={handleDragOver}
+                        onDrop={() => handleDrop(c.id)}
+                        className={`relative group border rounded-full px-3 py-1 flex items-center gap-2 bg-background shadow-sm text-sm ${editingId !== c.id ? "cursor-grab active:cursor-grabbing" : ""} ${draggedId === c.id ? "opacity-50" : ""}`}
+                    >
                         {editingId === c.id ? (
                             <div className="flex items-center gap-2">
                                 <input type="color" value={editColor} onChange={e => setEditColor(e.target.value)} className="w-5 h-5 rounded cursor-pointer border-0 p-0" />
