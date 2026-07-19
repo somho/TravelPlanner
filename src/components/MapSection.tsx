@@ -12,10 +12,10 @@ const mapContainerStyle = {
     height: "100%",
 };
 
-// V2 Default to Osaka City (Dotonbori)
+// V2 Default to Nagoya City (Nagoya Station Area)
 const defaultCenter = {
-    lat: 34.6687,
-    lng: 135.5013,
+    lat: 35.1709,
+    lng: 136.8815,
 };
 
 interface MapSectionProps {
@@ -47,7 +47,7 @@ export default function MapSection({ onAddBookmark, categories, bookmarks, event
     // Handle automated focus/panning
     useEffect(() => {
         if (activeFocusId && map) {
-            if (activeFocusId === "FUKUOKA") {
+            if (activeFocusId === "NAGOYA") {
                 map.panTo(defaultCenter);
                 map.setZoom(13);
                 setActiveMarkerId(null);
